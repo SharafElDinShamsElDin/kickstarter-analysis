@@ -184,3 +184,15 @@ For issues or questions:
 **Status:** ✅ Excel Integration Ready for Use
 
 Visit [xlwings Documentation](https://docs.xlwings.org) for more details.
+
+## Author
+
+Mohamed SharafEldin  
+Academic number: 202201849  
+Academic email: 12422021653750@pg.cu.edu.eg
+
+Under Supervision of:  
+- Dr. Tarek Ali
+  Faculty of Graduate Studies for Statistical Research
+- Prof. Mervat Gheith
+  Faculty of Graduate Studies for Statistical Research

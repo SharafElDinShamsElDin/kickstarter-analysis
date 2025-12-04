@@ -85,3 +85,15 @@ The model successfully predicts Kickstarter campaign success with sensible proba
 2. Create REST API endpoint
 3. Integrate with Kickstarter data pipeline
 4. Monitor predictions against actual outcomes
+
+## Author
+
+Mohamed SharafEldin  
+Academic number: 202201849  
+Academic email: 12422021653750@pg.cu.edu.eg
+
+Under Supervision of:  
+- Dr. Tarek Ali
+  Faculty of Graduate Studies for Statistical Research
+- Prof. Mervat Gheith
+  Faculty of Graduate Studies for Statistical Research
