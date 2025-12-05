@@ -1,0 +1,35 @@
+# xlwings Configuration with Custom Ribbon UI
+# Project: Kickstarter Success Predictor
+# Author: Mohamed SharafEldin (202201849)
+# Supervisors: Dr. Tarek Ali, Prof. Mervat Gheith
+
+[Excel]
+# Python path where modules are located
+python_path = .
+
+[UDF]
+# Modules to scan for @xw.func decorators
+modules = main, excel_integration
+# Call imports the first time the UDF is called
+call_imports = True
+
+[Ribbon]
+# Path to custom ribbon XML file (relative to config directory)
+ribbon_path = excel/customRibbon.xml
+
+# Custom UI settings
+ui_theme = Office2016Blue
+custom_button_color = 2E75B6  # Professional blue
+accent_color = 4472C4        # Accent blue
+
+[Adddin]
+# Add-in name as displayed in Excel
+name = Kickstarter Success Predictor
+
+# Version
+version = 1.0.0
+
+[App]
+# Application-level settings
+log_level = INFO
+debug_mode = False

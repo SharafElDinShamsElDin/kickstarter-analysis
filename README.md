@@ -1,49 +1,42 @@
-# Kickstarter Projects Analysis
+# Kickstarter Success Prediction Model
 
-A machine learning project that analyzes Kickstarter project data to predict project success using TensorFlow.
+**Deep Learning Model for Crowdfunding Outcome Analysis**
 
-## Overview
+Predicts Kickstarter campaign success using TensorFlow/Keras neural networks.
 
-This project processes Kickstarter project data, performs feature engineering, and builds a neural network model to predict whether a project will be successful or failed.
-
-## Project Structure
-
-- `import numpy as np.py` - Main analysis and model training script
-- `ks-projects-201801.csv` - Kickstarter projects dataset
-
-## Dependencies
-
-- numpy
-- pandas
-- scikit-learn
-- tensorflow
-
-## Installation
+## Quick Start
 
 ```bash
-pip install numpy pandas scikit-learn tensorflow
+# Setup
+git clone https://github.com/SharafElDinShamsElDin/kickstarter-analysis.git
+cd kickstarter-analysis
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# Verify
+python test_full_project.py
+
+# Use
+open kickstarter_branded.xlsm
+python scripts/excel_listener.py
 ```
 
-## Usage
+## Model Performance
+- **Accuracy:** 92.08%
+- **AUC:** 0.9780
+- **Training Data:** 37,887 campaigns
 
-Run the analysis script:
-
-```bash
-python "import numpy as np.py"
-```
-
-## Features
-
-- Data preprocessing and cleaning
-- Feature engineering (temporal features extraction)
-- One-hot encoding for categorical variables
-- Data normalization using StandardScaler
-- Train-test split for model evaluation
+## Documentation
+See `/docs/` folder for complete documentation:
+- `INDEX.md` — Start here
+- `QUICKSTART.md` — Quick guide
+- `MODEL.md` — Model details
+- `RESULTS.md` — Test results
+- `AUTHORS.md` — Authors & supervisors
 
 ## Author
+**Mohamed SharafEldin** (202201849)  
+Supervisors: Dr. Tarek Ali, Prof. Mervat Gheith
 
-Your Name
-
-## License
-
-MIT
+**Repository:** https://github.com/SharafElDinShamsElDin/kickstarter-analysis
