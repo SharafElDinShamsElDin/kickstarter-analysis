@@ -38,6 +38,8 @@ A machine learning model that predicts the probability of Kickstarter campaign s
 │
 ├── excel/                         # Excel-specific files
 │   ├── vba_module.bas             # VBA macro code for .xlsm
+│   ├── customRibbon.xml           # Custom ribbon UI with author branding
+│   ├── xlwings.conf.extended      # Enhanced config with blue theme
 │   └── xlwings.conf               # (also in root for discovery)
 │
 ├── artifacts/                     # Trained model artifacts
@@ -45,6 +47,8 @@ A machine learning model that predicts the probability of Kickstarter campaign s
 │   ├── scaler.pkl                 # Feature scaling transformer
 │   └── feature_columns.json       # Feature column names
 │
+├── kickstarter_branded.xlsm       # Pre-built workbook with blue branding
+├── test_full_project.py           # Comprehensive test suite (all 6 tests passing)
 ├── xlwings.conf                   # xlwings configuration (root)
 ├── requirements.txt               # Python dependencies
 ├── .gitignore                     # Git ignore file
@@ -81,12 +85,26 @@ A machine learning model that predicts the probability of Kickstarter campaign s
 
 ### Usage
 
-#### Option 1: Automatic (Listener) — **Recommended for simplicity**
+#### Option 1: Branded Workbook (Recommended) — **Custom UI with Professional Styling**
+```bash
+# Open the pre-built branded workbook
+open kickstarter_branded.xlsm
+# Then run the listener in another terminal:
+python scripts/excel_listener.py
+```
+- Blue-themed Excel workbook with project branding
+- Author attribution and supervisor acknowledgements
+- Pre-formatted input/output sections
+- Automatic predictions as you enter data
+
+**See:** `docs/BRANDED_WORKBOOK_GUIDE.md` for detailed usage and customization.
+
+#### Option 2: Automatic (Listener) — **Quick Alternative**
 ```bash
 cd scripts
 python excel_listener.py
 ```
-- Excel opens with a template.
+- Excel opens with a simple template.
 - Edit row 2 (sample input) and save.
 - The script automatically detects changes and writes predictions to cell L2.
 
@@ -138,6 +156,7 @@ python excel_listener.py
 ## Documentation
 
 - `docs/README.md` — Main documentation
+- `docs/BRANDED_WORKBOOK_GUIDE.md` — **Branded workbook usage and customization** ✨
 - `docs/QUICKSTART_EXCEL_MACOS.md` — macOS-specific quick start
 - `docs/XLWINGS_ADDON_SETUP.md` — Add-in setup and troubleshooting
 - `docs/TRAINING_RESULTS.md` — Model training metrics
