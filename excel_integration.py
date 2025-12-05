@@ -107,3 +107,34 @@ def KICKSTARTER_SUCCESS_SUMMARY(
     probability = _predict_from_json(campaign_json, model_dir)
     verdict = "Likely success" if probability >= 0.5 else "Needs improvement"
     return f"{verdict} — {probability:.2%} predicted success probability"
+
+def vba_predict(model_dir: str = "artifacts") -> float:
+    """Helper intended to be called from Excel VBA via xlwings' RunPython.
+
+    Usage (VBA macro example):
+        Sub GetPrediction()
+            RunPython "import sys; sys.path.append(r'/full/path/to/project'); from excel_integration import vba_predict; vba_predict('artifacts')"
+        End Sub
+
+    The function expects a sheet named "Predict" with headers in A1:J1 and
+    the sample input in A2:J2. The computed probability is written to cell L2
+    (header "Result"). Returns the probability (float between 0 and 1).
+    """
+
+    # When called via RunPython from Excel, Book.caller() returns the calling workbook.
+    wb = xw.Book.caller()
+    sheet = wb.sheets["Predict"]
+
+    headers = sheet.range("A1:J1").value
+    values = sheet.range("A2:J2").value
+    if not isinstance(values, list):
+        values = [values]
+
+    campaign = {h: v for h, v in zip(headers, values)}
+    campaign_json = json.dumps(campaign)
+
+    probability = _predict_from_json(campaign_json, model_dir)
+
+    # Write the numeric probability back into the sheet
+    sheet.range("L2").value = round(probability, 6)
+    return probability
