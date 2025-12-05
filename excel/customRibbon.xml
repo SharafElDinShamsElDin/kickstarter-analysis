@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Custom xlwings Ribbon for Kickstarter Success Predictor
+Author: Mohamed SharafEldin
+Academic Number: 202201849
+Supervisors: Dr. Tarek Ali, Prof. Mervat Gheith
+
+This ribbon provides a branded interface in Excel with blue-styled buttons
+for the project's custom functions.
+-->
+<customUI xmlns="http://schemas.microsoft.com/office/appforoffice/1.1">
+  <ribbon>
+    <tabs>
+      <tab id="kickstarterTab" label="Kickstarter Predictor">
+        <group id="predictorGroup" label="Campaign Analysis">
+          <!-- Probability Prediction Button -->
+          <button 
+            id="probabilityBtn" 
+            label="Success Probability" 
+            imageMso="Calculator" 
+            size="large"
+            onAction="KICKSTARTER_SUCCESS_PROBABILITY"
+            screentip="Calculate campaign success probability"
+            supertip="Calculates the probability (0-1) that a Kickstarter campaign will succeed based on the provided campaign data."/>
+          
+          <!-- Summary Button -->
+          <button 
+            id="summaryBtn" 
+            label="Success Summary" 
+            imageMso="ChartColumnClustered" 
+            size="large"
+            onAction="KICKSTARTER_SUCCESS_SUMMARY"
+            screentip="Get campaign success prediction summary"
+            supertip="Provides a readable verdict with the success probability percentage."/>
+        </group>
+        
+        <group id="infoGroup" label="Project Information">
+          <!-- Author Info Label -->
+          <labelControl 
+            id="authorLabel" 
+            label="👤 Author: Mohamed SharafEldin"
+            screentip="Academic Number: 202201849"/>
+          
+          <!-- Supervisors Label -->
+          <labelControl 
+            id="supervisorLabel" 
+            label="👨‍🏫 Supervisors: Dr. Tarek Ali, Prof. Mervat Gheith"
+            screentip="Faculty of Graduate Studies for Statistical Research"/>
+          
+          <!-- Project Details Label -->
+          <labelControl 
+            id="projectLabel" 
+            label="📊 Model: TensorFlow Neural Network | Accuracy: 92.08%"
+            screentip="Trained on 37,887 Kickstarter projects"/>
+        </group>
+        
+        <group id="helpGroup" label="Help &amp; Docs">
+          <!-- Help Button -->
+          <button 
+            id="helpBtn" 
+            label="Help" 
+            imageMso="Help" 
+            size="normal"
+            screentip="View documentation"
+            supertip="Open the project documentation and quick-start guide."/>
+          
+          <!-- GitHub Button -->
+          <button 
+            id="githubBtn" 
+            label="GitHub" 
+            imageMso="WebPart" 
+            size="normal"
+            screentip="Visit repository"
+            supertip="Open the project's GitHub repository."/>
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>
