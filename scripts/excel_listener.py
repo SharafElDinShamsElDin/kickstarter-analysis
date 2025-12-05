@@ -16,7 +16,11 @@ Notes:
 import time
 import json
 import os
+import sys
 from pathlib import Path
+
+# Add src/ to path so we can import from the project
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 try:
     import xlwings as xw

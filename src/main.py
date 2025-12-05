@@ -11,6 +11,12 @@ To use:
 """
 
 import json
+import sys
+from pathlib import Path
+
+# Add parent directory to path so imports work when called from Excel
+sys.path.insert(0, str(Path(__file__).parent))
+
 from excel_integration import KICKSTARTER_SUCCESS_PROBABILITY, KICKSTARTER_SUCCESS_SUMMARY
 
 # Re-export the UDFs so xlwings can discover them

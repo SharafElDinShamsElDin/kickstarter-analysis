@@ -32,10 +32,14 @@ Where cell ``A1`` contains a JSON string describing the campaign, e.g.:
 """
 
 import json
+import sys
 from pathlib import Path
 from typing import Dict, Iterable, Tuple
 
 import xlwings as xw
+
+# Ensure model_pipeline can be imported from src/
+sys.path.insert(0, str(Path(__file__).parent))
 
 from model_pipeline import load_artifacts, predict_success_probability
 
