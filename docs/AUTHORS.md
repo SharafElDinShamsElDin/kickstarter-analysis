@@ -1,12 +1,24 @@
-# Authors
+# Authors & Attribution
 
-- **Mohamed SharafEldin** — Academic number: `202201849` — `12422021653750@pg.cu.edu.eg`
+**Date:** July 2024
 
-## Acknowledgements
+## Author
 
-This work was carried out under the supervision and guidance of:
+**Mohamed SharafEldin**
+- Academic Number: 202201849
+- Email: 12422021653750@pg.cu.edu.eg
+- Institution: Cairo University
 
-- Dr. Tarek Ali — Faculty of Graduate Studies for Statistical Research
-- Prof. Mervat Gheith — Faculty of Graduate Studies for Statistical Research
+## Supervisors
 
-Thank you to both supervisors for their support and guidance during the development of this project.
+**Dr. Tarek Ali**
+- Faculty of Graduate Studies for Statistical Research
+
+**Prof. Mervat Gheith**
+- Faculty of Graduate Studies for Statistical Research
+
+## Project Information
+
+- **Title:** Kickstarter Success Prediction Model
+- **Timeline:** January 2024 - December 2024
+- **Repository:** https://github.com/SharafElDinShamsElDin/kickstarter-analysis
