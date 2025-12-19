@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kickstarter Success Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: direction 0.3s ease;
+        }
+        
+        body[dir="rtl"] {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        body[dir="rtl"] .lang-switcher {
+            right: auto;
+            left: 20px;
+        }
+        
+        .lang-btn {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 60px 40px;
+            text-align: center;
+            background: #f8f9ff;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8ebff;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .upload-text {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .upload-subtext {
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+        
+        .results {
+            margin-top: 30px;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .summary {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .summary-item {
+            text-align: center;
+            padding: 15px;
+            min-width: 150px;
+        }
+        
+        .summary-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .summary-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .results-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .results-table th,
+        .results-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .results-table tbody tr:hover {
+            background: #f8f9ff;
+        }
+        
+        .verdict {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            display: inline-block;
+        }
+        
+        .verdict-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .verdict-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .info-box {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .upload-area {
+                padding: 40px 20px;
+            }
+            
+            .results-table th,
+            .results-table td {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">العربية</button>
+    </div>
+    <div class="container">
+        <h1 id="title">🚀 Kickstarter Success Predictor</h1>
+        <p class="subtitle" id="subtitle">Upload your campaign data and get AI-powered predictions</p>
+        
+        <div class="info-box">
+            <strong id="howItWorksLabel">ℹ️ How it works:</strong> <span id="howItWorksText">Upload an Excel, CSV, or JSON file with your campaign data. The AI model will analyze each campaign and predict its success probability.</span>
+        </div>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📊</div>
+            <div class="upload-text" id="uploadText">Drag & Drop your data file here</div>
+            <div class="upload-subtext" id="uploadSubtext">or click to browse (Excel, CSV, or JSON files, max 16MB)</div>
+            <input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.json">
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button class="btn btn-secondary" onclick="downloadSample()" id="btnExcel">📥 Download Excel Template</button>
+            <button class="btn btn-secondary" onclick="downloadSampleJSON()" id="btnJSON">📥 Download JSON Template</button>
+            <button class="btn" onclick="window.location.href='/report'" id="btnReport">📄 View Academic Report</button>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p id="loadingText">Analyzing campaigns with AI model...</p>
+        </div>
+        
+        <div class="error" id="error"></div>
+        
+        <div class="results" id="results">
+            <h2 id="resultsTitle">📈 Prediction Results</h2>
+            <div class="summary" id="summary"></div>
+            
+            <div class="table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th id="thCampaign">Campaign</th>
+                            <th id="thGoal">Goal</th>
+                            <th id="thCategory">Category</th>
+                            <th id="thCountry">Country</th>
+                            <th id="thProbability">Success Probability</th>
+                            <th id="thVerdict">Verdict</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody"></tbody>
+                </table>
+            </div>
+            
+            <div class="actions">
+                <button class="btn" onclick="downloadResults()" id="btnDownload">💾 Download Results</button>
+                <button class="btn btn-secondary" onclick="reset()" id="btnReset">🔄 Upload Another File</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentResults = [];
+        let currentLang = localStorage.getItem('language') || 'en';
+        
+        const translations = {
+            en: {
+                title: '🚀 Kickstarter Success Predictor',
+                subtitle: 'Upload your campaign data and get AI-powered predictions',
+                howItWorksLabel: 'ℹ️ How it works:',
+                howItWorksText: 'Upload an Excel, CSV, or JSON file with your campaign data. The AI model will analyze each campaign and predict its success probability.',
+                uploadText: 'Drag & Drop your data file here',
+                uploadSubtext: 'or click to browse (Excel, CSV, or JSON files, max 16MB)',
+                btnExcel: '📥 Download Excel Template',
+                btnJSON: '📥 Download JSON Template',
+                btnReport: '📄 View Academic Report',
+                loadingText: 'Analyzing campaigns with AI model...',
+                resultsTitle: '📈 Prediction Results',
+                thCampaign: 'Campaign',
+                thGoal: 'Goal',
+                thCategory: 'Category',
+                thCountry: 'Country',
+                thProbability: 'Success Probability',
+                thVerdict: 'Verdict',
+                btnDownload: '💾 Download Results',
+                btnReset: '🔄 Upload Another File',
+                totalCampaigns: 'Total Campaigns',
+                likelyToSucceed: 'Likely to Succeed',
+                avgSuccessRate: 'Average Success Rate',
+                likelySuccess: 'Likely Success',
+                needsImprovement: 'Needs Improvement'
+            },
+            ar: {
+                title: '🚀 متنبئ نجاح كيك ستارتر',
+                subtitle: 'قم بتحميل بيانات حملتك واحصل على توقعات مدعومة بالذكاء الاصطناعي',
+                howItWorksLabel: 'ℹ️ كيف يعمل:',
+                howItWorksText: 'قم بتحميل ملف Excel أو CSV أو JSON يحتوي على بيانات حملتك. سيقوم نموذج الذكاء الاصطناعي بتحليل كل حملة والتنبؤ باحتمالية نجاحها.',
+                uploadText: 'اسحب وأفلت ملف البيانات هنا',
+                uploadSubtext: 'أو انقر للتصفح (ملفات Excel أو CSV أو JSON، الحد الأقصى 16 ميجابايت)',
+                btnExcel: '📥 تحميل قالب Excel',
+                btnJSON: '📥 تحميل قالب JSON',
+                btnReport: '📄 عرض التقرير الأكاديمي',
+                loadingText: 'جاري تحليل الحملات باستخدام نموذج الذكاء الاصطناعي...',
+                resultsTitle: '📈 نتائج التنبؤ',
+                thCampaign: 'الحملة',
+                thGoal: 'الهدف',
+                thCategory: 'الفئة',
+                thCountry: 'البلد',
+                thProbability: 'احتمالية النجاح',
+                thVerdict: 'الحكم',
+                btnDownload: '💾 تحميل النتائج',
+                btnReset: '🔄 تحميل ملف آخر',
+                totalCampaigns: 'إجمالي الحملات',
+                likelyToSucceed: 'محتمل النجاح',
+                avgSuccessRate: 'معدل النجاح المتوسط',
+                likelySuccess: 'نجاح محتمل',
+                needsImprovement: 'يحتاج إلى تحسين'
+            }
+        };
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            localStorage.setItem('language', currentLang);
+            applyLanguage();
+        }
+        
+        function applyLanguage() {
+            const lang = translations[currentLang];
+            document.documentElement.setAttribute('lang', currentLang);
+            document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            document.getElementById('langBtn').textContent = currentLang === 'en' ? 'العربية' : 'English';
+            
+            // Apply translations
+            Object.keys(lang).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = lang[key];
+                }
+            });
+        }
+        
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            applyLanguage();
+        });
+        
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const results = document.getElementById('results');
+        
+        // Click to upload
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        // File selection
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                uploadFile(e.target.files[0]);
+            }
+        });
+        
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
+                uploadFile(e.dataTransfer.files[0]);
+            }
+        });
+        
+        function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            loading.classList.add('show');
+            error.classList.remove('show');
+            results.classList.remove('show');
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.classList.remove('show');
+                
+                if (data.error) {
+                    showError(data.error);
+                } else {
+                    showResults(data);
+                }
+            })
+            .catch(err => {
+                loading.classList.remove('show');
+                showError('Error uploading file: ' + err.message);
+            });
+        }
+        
+        function showError(message) {
+            error.textContent = message;
+            error.classList.add('show');
+        }
+        
+        function showResults(data) {
+            currentResults = data.results;
+            
+            // Calculate summary statistics
+            const successCount = data.results.filter(r => r.verdict === 'Likely Success').length;
+            const avgProbability = data.results.reduce((sum, r) => sum + (r.probability || 0), 0) / data.results.length;
+            
+            // Update summary
+            const lang = translations[currentLang];
+            document.getElementById('summary').innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-value">${data.total_campaigns}</div>
+                    <div class="summary-label">${lang.totalCampaigns}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value">${successCount}</div>
+                    <div class="summary-label">${lang.likelyToSucceed}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value">${avgProbability.toFixed(1)}%</div>
+                    <div class="summary-label">${lang.avgSuccessRate}</div>
+                </div>
+            `;
+            
+            // Update table
+            const tbody = document.getElementById('resultsBody');
+            tbody.innerHTML = data.results.map(r => {
+                if (r.error) {
+                    return `
+                        <tr>
+                            <td>${r.row}</td>
+                            <td colspan="6" style="color: #dc3545;">Error: ${r.error}</td>
+                        </tr>
+                    `;
+                }
+                const lang = translations[currentLang];
+                const verdictText = r.verdict === 'Likely Success' ? lang.likelySuccess : lang.needsImprovement;
+                return `
+                    <tr>
+                        <td>${r.row}</td>
+                        <td>${r.campaign || 'N/A'}</td>
+                        <td>$${r.goal?.toLocaleString() || 'N/A'}</td>
+                        <td>${r.category || 'N/A'}</td>
+                        <td>${r.country || 'N/A'}</td>
+                        <td><strong>${r.probability}%</strong></td>
+                        <td><span class="verdict ${r.verdict === 'Likely Success' ? 'verdict-success' : 'verdict-warning'}">${verdictText}</span></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            results.classList.add('show');
+        }
+        
+        function downloadResults() {
+            fetch('/download_results', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ results: currentResults })
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `kickstarter_predictions_${Date.now()}.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(err => {
+                showError('Error downloading results: ' + err.message);
+            });
+        }
+        
+        function downloadSample() {
+            window.location.href = '/sample';
+        }
+        
+        function downloadSampleJSON() {
+            window.location.href = '/sample/json';
+        }
+        
+        function reset() {
+            fileInput.value = '';
+            results.classList.remove('show');
+            error.classList.remove('show');
+            currentResults = [];
+        }
+    </script>
+</body>
+</html>
